@@ -5,7 +5,7 @@
         <q-card-section>
           <div class="row items-center no-wrap">
             <div class="col">
-              <div v-if="isUserAuth" class="q-ma-lg">
+              <div v-if="currentUser" class="q-ma-lg">
                 <div class="text-h5">Update Your Password</div>
                 <br />
                 <br />
@@ -72,7 +72,7 @@
                   icon="person"
                   color="primary"
                   label="Update"
-                  @click="updatePwd()"
+                  @click="checkInfro()"
                 ></q-btn>
                 <br />
                 <q-btn
@@ -83,7 +83,7 @@
                   @click="deleteUsr"
                 ></q-btn>
               </div>
-              <div v-if="!isUserAuth" class="q-ma-lg">
+              <div v-if="!currentUser" class="q-ma-lg">
                 <br />
                 <q-icon
                   name="warning"
@@ -126,6 +126,31 @@ export default defineComponent({
     var password2 = ref();
     var isPwd1 = ref("true");
     var isPwd2 = ref("true");
+
+    let checkInfro = () => {
+      if (!password1.value | !password2.value) {
+        $q.notify({
+          position: "center",
+          message: "비밀번호와 비밀번호 재확인 모두 입력해주세요.",
+          color: "red",
+        });
+      } else if (password1.value != password2.value) {
+        $q.notify({
+          position: "center",
+          message: "비밀번호가 일치하지 않습니다.",
+          color: "red",
+        });
+      } else if (password1.value.length < 6) {
+        $q.notify({
+          position: "center",
+          message: "비밀번호는 6자리 이상 입력해주세요.",
+          color: "red",
+        });
+      } else {
+        updatePwd();
+      }
+    };
+
     let updatePwd = () => {
       currentUser
         .updatePassword(password1.value)
@@ -182,6 +207,7 @@ export default defineComponent({
       password2,
       isPwd1,
       isPwd2,
+      checkInfro,
       updatePwd,
       deleteUsr,
     };

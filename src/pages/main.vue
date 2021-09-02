@@ -11,7 +11,7 @@
                 <br />
                 반가워요 {{ userName }}님!
                 <br />
-                {{ getFireUser.email }}
+                {{ userId }}
                 <br />
                 <br />
                 <br />
@@ -108,7 +108,7 @@ export default defineComponent({
     auth.onAuthStateChanged((user) => {
       if (user) {
         console.log(user);
-        userName.value = user.displayName;
+        //userName.value = user.displayName;
         // var uid = user.uid;
       } else {
       }

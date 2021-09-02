@@ -46,6 +46,15 @@
               <div class="text-h6">Name</div>
               <br />
               <q-input filled v-model="name" label="이름"></q-input> <br />
+              <div class="text-h6">Phone Number</div>
+              <br />
+              <q-input
+                filled
+                v-model="phone"
+                label="전화번호"
+                mask="###########"
+                fill-mask
+              ></q-input>
               <div class="text-h6">Date Of Birth</div>
               <br />
               <q-input v-model="date" filled type="date"></q-input>
@@ -89,6 +98,7 @@ export default defineComponent({
     let isPwd2 = ref("true");
     let name = ref("");
     let date = ref("");
+    let phone = ref("");
 
     // 가입정보 확인
     // 공백이 있으면 if문 없으면 else
@@ -100,14 +110,15 @@ export default defineComponent({
         !password1.value |
         !password2.value |
         !name.value |
-        !date.value
+        !date.value |
+        !phone.value
       ) {
         let textVal = ref("");
         if (!email.value) {
           textVal = ref("이메일");
         } else if (!password1.value | !password2.value) {
           textVal = ref("비밀번호");
-        } else if (!name.value | !date.value) {
+        } else if (!name.value | !date.value | !phone.value) {
           textVal = ref("사용자정보");
         }
         $q.notify({
@@ -166,8 +177,10 @@ export default defineComponent({
         .createUserWithEmailAndPassword(email.value, password1.value)
         .then((userCredential) => {
           var user = userCredential.user;
+          console.log(user);
           user.updateProfile({
             displayName: name.value,
+            phoneNumber: phone.value,
             birthday: date.value,
           });
           // $q.notify({
@@ -197,6 +210,7 @@ export default defineComponent({
       isPwd2,
       name,
       date,
+      phone,
       checkInfromation,
       join,
     };

@@ -5,12 +5,21 @@
         <q-card-section>
           <div class="row items-center no-wrap">
             <div class="col">
-              <div v-if="isUserAuth" class="q-ma-lg">
+              <div v-if="currentUser" class="q-ma-lg">
                 <div class="text-h5">Account Information</div>
                 <br />
                 <br />
                 <div class="text-h6">{{ userName }}님의 계정정보</div>
                 <br />
+                <br />
+                <div class="text-h6">Name</div>
+                <q-field outlined :dense="dense">
+                  <template v-slot:control>
+                    <div class="self-center full-width no-outline" tabindex="0">
+                      <center>{{ userName }}</center>
+                    </div>
+                  </template>
+                </q-field>
                 <br />
                 <div class="text-h6">ID</div>
                 <q-field outlined :dense="dense">
@@ -21,18 +30,16 @@
                   </template>
                 </q-field>
                 <br />
-                <div class="text-h6">Name</div>
-                <br />
+                <div class="text-h6">EmailVerified</div>
                 <q-field outlined :dense="dense">
                   <template v-slot:control>
                     <div class="self-center full-width no-outline" tabindex="0">
-                      <center>{{ userName }}</center>
+                      <center>{{ emailVerified }}</center>
                     </div>
                   </template>
                 </q-field>
                 <br />
                 <br />
-                {{ date }}
                 <q-separator></q-separator>
                 <br />
                 <q-btn
@@ -68,7 +75,7 @@
                   @click="deleteUsr"
                 ></q-btn>
               </div>
-              <div v-if="!isUserAuth" class="q-ma-lg">
+              <div v-if="!currentUser" class="q-ma-lg">
                 <br />
                 <q-icon
                   name="warning"
@@ -105,20 +112,25 @@ export default defineComponent({
     const $route = useRoute();
     const currentUser = auth.currentUser;
 
+    // const userName = currentUser.displayName;
+    // const userId = currentUser.displayName;
     var userName = ref();
     var userId = ref();
-    var date = ref();
+    var date = ref("");
+    var emailVerified = ref("False");
 
     if (currentUser !== null) {
       currentUser.providerData.forEach((profile) => {
         userId.value = profile.uid;
         userName.value = profile.displayName;
-        date.value = profile.date;
+        emailVerified.value = currentUser.emailVerified;
+        date.value = currentUser.birthday;
         console.log("Sign-in provider: " + profile.providerId);
         console.log("  Provider-specific UID: " + profile.uid);
         console.log("  Name: " + profile.displayName);
         console.log("  Email: " + profile.email);
-        console.log("  birthday: " + profile.birthday);
+        console.log("  emailVerified: " + emailVerified.value);
+        console.log("  birthday: " + date.value);
       });
     }
 
@@ -151,7 +163,7 @@ export default defineComponent({
       currentUser,
       userId,
       userName,
-      date,
+      emailVerified,
       deleteUsr,
     };
   },
