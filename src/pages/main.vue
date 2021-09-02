@@ -22,12 +22,12 @@
                   to="/"
                 ></q-btn>
                 <br />
-                <!-- <q-btn
+                <q-btn
                   flat
                   color="primary"
                   label="Account Information"
                   to="/myInfo"
-                ></q-btn> -->
+                ></q-btn>
                 <br />
                 <q-btn
                   flat
