@@ -5,12 +5,12 @@
         <q-card-section>
           <div class="row items-center no-wrap">
             <div class="col">
-              <center><div class="text-h5">SIGNUP</div></center>
+              <div class="text-h5">SIGNUP</div>
               <br />
-              <center><div class="text-h6">Email</div></center>
+              <div class="text-h6">Email</div>
               <br />
               <q-input filled v-model="email" label="이메일"></q-input> <br />
-              <center><div class="text-h6">Password</div></center>
+              <div class="text-h6">Password</div>
               <br />
               <q-input
                 v-model="password1"
@@ -43,10 +43,10 @@
                 </template>
               </q-input>
               <br />
-              <center><div class="text-h6">Name</div></center>
+              <div class="text-h6">Name</div>
               <br />
               <q-input filled v-model="name" label="이름"></q-input> <br />
-              <center><div class="text-h6">Date Of Birth</div></center>
+              <div class="text-h6">Date Of Birth</div>
               <br />
               <q-input v-model="date" filled type="date"></q-input>
               <br />
@@ -111,19 +111,19 @@ export default defineComponent({
           textVal = ref("사용자정보");
         }
         $q.notify({
-          position: "top",
+          position: "center",
           message: textVal.value + "에 공백이 존재합니다.",
           color: "red",
         });
       } else if (password1.value != password2.value) {
         $q.notify({
-          position: "top",
+          position: "center",
           message: "비밀번호가 일치하지 않습니다.",
           color: "red",
         });
       } else if (password1.value.length < 6) {
         $q.notify({
-          position: "top",
+          position: "center",
           message: "비밀번호는 6자리 이상 입력해주세요.",
           color: "red",
         });
@@ -136,14 +136,27 @@ export default defineComponent({
       auth
         .signInWithEmailAndPassword(email.value, password1.value)
         .then((userCredential) => {
+          // Signed in
           var user = userCredential.user;
           console.log("success", user.email);
           $q.notify({
-            position: "top",
-            message: "login success",
+            position: "center",
+            message:
+              "회원가입이 완료되어었습니다.  " + name.value + "님! 환영합니다.",
             color: "grey",
           });
           $router.push({ path: "/main" });
+          // ...
+        })
+        .catch((error) => {
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          console.log(errorMessage);
+          $q.notify({
+            position: "center",
+            message: errorMessage,
+            color: "red",
+          });
         });
     };
 
@@ -153,18 +166,21 @@ export default defineComponent({
         .createUserWithEmailAndPassword(email.value, password1.value)
         .then((userCredential) => {
           var user = userCredential.user;
-          $q.notify({
-            position: "top",
-            message: "회원가입이 완료되었습니다.",
-            color: "grey",
+          user.updateProfile({
+            displayName: name.value,
           });
+          // $q.notify({
+          //   position: "top",
+          //   message: "회원가입이 완료되었습니다.",
+          //   color: "grey",
+          // });
           login();
         })
         .catch((error) => {
           var errorCode = error.code;
           var errorMessage = error.message;
           $q.notify({
-            position: "top",
+            position: "center",
             message: errorMessage,
             color: "red",
           });

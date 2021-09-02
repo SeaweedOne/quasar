@@ -28,8 +28,10 @@
             @click="login()"
             label="LOGIN"
           ></q-btn>
-          <q-btn flat to="/signup">회원가입</q-btn>
-          <q-btn flat>아이디/비밀번호 찾기</q-btn>
+          <q-btn flat outline style="color: primary" to="/signup"
+            >회원가입</q-btn
+          >
+          <q-btn flat to="/findPwd">비밀번호 찾기</q-btn>
           <!-- <router-link to="/signup"> 회원가입 </router-link> -->
         </div>
       </div>
@@ -42,6 +44,8 @@ import { defineComponent, ref } from "vue";
 import { auth } from "src/boot/firebase";
 import { useQuasar } from "quasar";
 import { useRouter, useRoute } from "vue-router";
+import { useStore } from "vuex";
+
 export default defineComponent({
   name: "login",
 
@@ -49,10 +53,12 @@ export default defineComponent({
     const $q = useQuasar();
     const $router = useRouter();
     const $route = useRoute();
+    const store = useStore();
 
     let email = ref("");
     let password = ref("");
     let isPwd = ref("true");
+
     let login = () => {
       auth
         .signInWithEmailAndPassword(email.value, password.value)
@@ -60,20 +66,21 @@ export default defineComponent({
           // Signed in
           var user = userCredential.user;
           console.log("success", user.email);
+          store.commit("setFireUser", userCredential.user);
+
           $q.notify({
-            position: "top",
+            position: "center",
             message: "login success",
             color: "grey",
           });
           $router.push({ path: "/main" });
-          // ...
         })
         .catch((error) => {
           var errorCode = error.code;
           var errorMessage = error.message;
           console.log(errorMessage);
           $q.notify({
-            position: "top",
+            position: "center",
             message: errorMessage,
             color: "red",
           });

@@ -12,11 +12,45 @@ import { createStore } from 'vuex'
  * with the Store instance.
  */
 
+import { auth } from 'src/boot/firebase'
+
 export default store(function (/* { ssrContext } */) {
   const Store = createStore({
     modules: {
       // example
     },
+    state:{
+      fireUser:null
+    },
+    actions:{
+      signOutAction({commit}) {
+        auth.signOut().then(() =>{
+        commit("setFireUser",null)
+        })
+      },
+      authAction({commit}){
+       auth.onAuthStatChanged(user =>{
+         if (user){
+           commit("setFireUser",user)
+         }
+
+       }) 
+      }
+    },
+    mutations: {
+      setFireUser(state, firebaseUser){
+        state.fireUser = firebaseUser
+      }
+    },
+    getters:{
+      getFireUser(state){
+        return state.fireUser
+      },
+      isUserAuth(state){
+        return !!state.fireUser
+      }
+    },
+  
 
     // enable strict mode (adds overhead!)
     // for dev mode and --debug builds only
