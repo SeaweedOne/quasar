@@ -1,6 +1,5 @@
 # Quasar App (hana)
 
-A Quasar Framework app
 https://hana-firebase.netlify.app
 
 ## Install the dependencies
