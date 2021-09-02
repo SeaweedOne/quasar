@@ -161,7 +161,7 @@ export default defineComponent({
     };
 
     let join = () => {
-      console.log("called" + email.value);
+      console.log("called " + email.value);
       auth
         .createUserWithEmailAndPassword(email.value, password1.value)
         .then((userCredential) => {

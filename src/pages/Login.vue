@@ -5,7 +5,6 @@
         <div class="q-gutter-y-md column" style="max-width: 300px">
           <center><div class="text-h4">LOGIN</div></center>
           <br />
-
           <q-input filled v-model="email" label="Email"></q-input>
           <q-input
             v-model="password"
