@@ -5,7 +5,8 @@
         <q-card-section>
           <div class="row items-center no-wrap">
             <div class="col">
-              <center><div class="text-h5">회원약관</div></center>
+              <div class="text-h5">회원약관</div>
+              <br />
               <q-field standout :dense="dense" disable readonly>
                 <template v-slot:control>
                   <div class="self-center full-width no-outline">
@@ -15,6 +16,14 @@
                   </div>
                 </template>
               </q-field>
+              <br />
+              <br />
+              <q-btn
+                unelevated
+                color="primary"
+                label="확인"
+                to="/signUp"
+              ></q-btn>
             </div>
           </div>
         </q-card-section>

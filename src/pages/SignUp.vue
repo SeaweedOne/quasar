@@ -168,6 +168,7 @@ export default defineComponent({
           var user = userCredential.user;
           user.updateProfile({
             displayName: name.value,
+            birthday: date.value,
           });
           // $q.notify({
           //   position: "top",

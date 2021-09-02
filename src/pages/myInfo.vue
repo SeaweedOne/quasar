@@ -6,23 +6,49 @@
           <div class="row items-center no-wrap">
             <div class="col">
               <div v-if="isUserAuth" class="q-ma-lg">
-                <div class="text-h5">HELLO!</div>
+                <div class="text-h5">Account Information</div>
                 <br />
                 <br />
-                반가워요 {{ userName }}님!
-                <br />
-                {{ getFireUser.email }}
+                <div class="text-h6">{{ userName }}님의 계정정보</div>
                 <br />
                 <br />
+                <div class="text-h6">ID</div>
+                <q-field outlined :dense="dense">
+                  <template v-slot:control>
+                    <div class="self-center full-width no-outline" tabindex="0">
+                      <center>{{ userId }}</center>
+                    </div>
+                  </template>
+                </q-field>
                 <br />
+                <div class="text-h6">Name</div>
+                <br />
+                <q-field outlined :dense="dense">
+                  <template v-slot:control>
+                    <div class="self-center full-width no-outline" tabindex="0">
+                      <center>{{ userName }}</center>
+                    </div>
+                  </template>
+                </q-field>
+                <br />
+                <br />
+                {{ date }}
                 <q-separator></q-separator>
+                <br />
+                <q-btn
+                  flat
+                  icon="home"
+                  color="primary"
+                  label="home"
+                  to="/main"
+                ></q-btn>
                 <br />
                 <q-btn
                   flat
                   icon="person"
                   color="primary"
-                  label="Account Information"
-                  to="/myInfo"
+                  label="Update Password"
+                  to="/updatePwd"
                 ></q-btn>
                 <br />
                 <q-btn
@@ -79,7 +105,22 @@ export default defineComponent({
     const $route = useRoute();
     const currentUser = auth.currentUser;
 
-    var userName = ref("");
+    var userName = ref();
+    var userId = ref();
+    var date = ref();
+
+    if (currentUser !== null) {
+      currentUser.providerData.forEach((profile) => {
+        userId.value = profile.uid;
+        userName.value = profile.displayName;
+        date.value = profile.date;
+        console.log("Sign-in provider: " + profile.providerId);
+        console.log("  Provider-specific UID: " + profile.uid);
+        console.log("  Name: " + profile.displayName);
+        console.log("  Email: " + profile.email);
+        console.log("  birthday: " + profile.birthday);
+      });
+    }
 
     let deleteUsr = () => {
       currentUser
@@ -104,19 +145,13 @@ export default defineComponent({
         });
     };
 
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        console.log(user);
-        userName.value = user.displayName;
-        // var uid = user.uid;
-      } else {
-      }
-    });
-
     return {
       text: ref("Field content"),
       dense: ref(false),
+      currentUser,
+      userId,
       userName,
+      date,
       deleteUsr,
     };
   },
@@ -136,6 +171,7 @@ export default defineComponent({
   display: flex;
   width: 50%;
   justify-content: center;
+  // max-width: 250px
   align-items: center;
 }
 </style>
