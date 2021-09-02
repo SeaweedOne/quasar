@@ -50,7 +50,7 @@ const linksList = [
   {
     title: "MyPage",
     icon: "person",
-    link: "https://hana-firebase.netlify.app/#/myAccount",
+    link: "https://hana-firebase.netlify.app/#/myInfo",
   },
   {
     title: "Hana's Profile",

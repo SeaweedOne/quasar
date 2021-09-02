@@ -5,7 +5,7 @@
         <q-card-section>
           <div class="row items-center no-wrap">
             <div class="col">
-              <div v-if="isUserAuth" class="q-ma-lg">
+              <div v-if="currentUser" class="q-ma-lg">
                 <div class="text-h5">HELLO!</div>
                 <br />
                 <br />
@@ -42,7 +42,7 @@
                   @click="deleteUsr"
                 ></q-btn>
               </div>
-              <div v-if="!isUserAuth" class="q-ma-lg">
+              <div v-if="!currentUser" class="q-ma-lg">
                 <br />
                 <q-icon
                   name="warning"
@@ -79,7 +79,8 @@ export default defineComponent({
     const $route = useRoute();
     const currentUser = auth.currentUser;
 
-    var userName = ref("");
+    var userName = currentUser.displayName;
+    var userId = currentUser.email;
 
     let deleteUsr = () => {
       currentUser
@@ -117,6 +118,8 @@ export default defineComponent({
       text: ref("Field content"),
       dense: ref(false),
       userName,
+      userId,
+      currentUser,
       deleteUsr,
     };
   },
