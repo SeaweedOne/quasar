@@ -3,59 +3,57 @@
     <div id="main" style="min-height: 1000vh" class="q-ma-lg">
       <q-card flat bordered class="my-card bg-grey-1" style="min-height: 50vh">
         <q-card-section>
-          <div class="row items-center no-wrap">
-            <div class="col">
-              <div v-if="currentUser" class="q-ma-lg">
-                <div class="text-h5">HELLO!</div>
-                <br />
-                <br />
-                반가워요 {{ userName }}님!
-                <br />
-                {{ userId }}
-                <br />
-                <br />
-                <br />
-                <q-separator></q-separator>
-                <br />
-                <q-btn
-                  flat
-                  icon="person"
-                  color="primary"
-                  label="Account Information"
-                  to="/myInfo"
-                ></q-btn>
-                <br />
-                <q-btn
-                  flat
-                  icon="logout"
-                  color="primary"
-                  label="LOGOUT"
-                  @click="signOutAction"
-                  to="/"
-                ></q-btn>
-                <br />
-                <q-btn
-                  flat
-                  icon="delete"
-                  color="primary"
-                  label="Delete Account"
-                  @click="deleteUsr"
-                ></q-btn>
-              </div>
-              <div v-if="!currentUser" class="q-ma-lg">
-                <br />
-                <q-icon
-                  name="warning"
-                  class="text-red"
-                  style="font-size: 4rem"
-                ></q-icon>
-                <br />
-                <br />
-                <div class="text-h5">로그인이 필요합니다!</div>
-                <br />
-                <br />
-                <q-btn unelevated color="primary" label="LOGIN" to="/"></q-btn>
-              </div>
+          <div class="col">
+            <div v-if="currentUser" class="q-ma-lg">
+              <div class="text-h5">HELLO!</div>
+              <br />
+              <br />
+              반가워요 {{ userName }}님!
+              <br />
+              {{ userId }}
+              <br />
+              <br />
+              <br />
+              <q-separator></q-separator>
+              <br />
+              <q-btn
+                flat
+                icon="person"
+                color="primary"
+                label="Account Information"
+                to="/myInfo"
+              ></q-btn>
+              <br />
+              <q-btn
+                flat
+                icon="logout"
+                color="primary"
+                label="LOGOUT"
+                @click="signOutAction"
+                to="/"
+              ></q-btn>
+              <br />
+              <q-btn
+                flat
+                icon="delete"
+                color="primary"
+                label="Delete Account"
+                @click="deleteUsr"
+              ></q-btn>
+            </div>
+            <div v-if="!currentUser" class="q-ma-lg">
+              <br />
+              <q-icon
+                name="warning"
+                class="text-red"
+                style="font-size: 4rem"
+              ></q-icon>
+              <br />
+              <br />
+              <div class="text-h5">로그인이 필요합니다!</div>
+              <br />
+              <br />
+              <q-btn unelevated color="primary" label="LOGIN" to="/"></q-btn>
             </div>
           </div>
         </q-card-section>

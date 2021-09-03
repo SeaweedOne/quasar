@@ -3,100 +3,96 @@
     <div id="main" style="min-height: 1000vh" class="q-ma-lg">
       <q-card flat bordered class="my-card bg-grey-1" style="min-height: 50vh">
         <q-card-section>
-          <div class="row items-center no-wrap">
-            <div class="col">
-              <div v-if="currentUser" class="q-ma-lg">
-                <div class="text-h5">Update Your Password</div>
-                <br />
-                <br />
-                <div class="text-h6">{{ userName }}님</div>
-                <br />
-                <br />
-                <div class="text-h6">ID</div>
-                아이디는 변경이 불가능합니다.
-                <br />
-                <q-field outlined :dense="dense">
-                  <template v-slot:control>
-                    <div class="self-center full-width no-outline" tabindex="0">
-                      <center>{{ userId }}</center>
-                    </div>
-                  </template>
-                </q-field>
-                <br />
-                <div class="text-h6">Password</div>
-                <br />
-                <q-input
-                  v-model="password1"
-                  label="비밀번호 (6자 이상)"
-                  filled
-                  :type="isPwd1 ? 'password' : 'text'"
-                  hint=""
-                >
-                  <template v-slot:append>
-                    <q-icon
-                      :name="isPwd1 ? 'visibility_off' : 'visibility'"
-                      class="cursor-pointer"
-                      @click="isPwd1 = !isPwd1"
-                    ></q-icon>
-                  </template>
-                </q-input>
+          <div class="col">
+            <div v-if="currentUser" class="q-ma-lg">
+              <div class="text-h5">Update Your Password</div>
+              <div class="text-h6">{{ userName }}님</div>
+              <br />
+              <br />
+              <div class="text-h6">ID</div>
+              아이디는 변경이 불가능합니다.
+              <br />
+              <q-field outlined :dense="dense">
+                <template v-slot:control>
+                  <div class="self-center full-width no-outline" tabindex="0">
+                    <center>{{ userId }}</center>
+                  </div>
+                </template>
+              </q-field>
+              <br />
+              <div class="text-h6">Password</div>
+              <br />
+              <q-input
+                v-model="password1"
+                label="비밀번호 (6자 이상)"
+                filled
+                :type="isPwd1 ? 'password' : 'text'"
+                hint=""
+              >
+                <template v-slot:append>
+                  <q-icon
+                    :name="isPwd1 ? 'visibility_off' : 'visibility'"
+                    class="cursor-pointer"
+                    @click="isPwd1 = !isPwd1"
+                  ></q-icon>
+                </template>
+              </q-input>
 
-                <q-input
-                  v-model="password2"
-                  filled
-                  label="비밀번호 확인"
-                  :type="isPwd2 ? 'password' : 'text'"
-                >
-                  <template v-slot:append>
-                    <q-icon
-                      :name="isPwd2 ? 'visibility_off' : 'visibility'"
-                      class="cursor-pointer"
-                      @click="isPwd2 = !isPwd2"
-                    ></q-icon>
-                  </template>
-                </q-input>
-                <br />
-                <br />
-                <q-separator></q-separator>
-                <br />
-                <q-btn
-                  flat
-                  icon="home"
-                  color="primary"
-                  label="home"
-                  to="/main"
-                ></q-btn>
-                <br />
-                <q-btn
-                  flat
-                  icon="person"
-                  color="primary"
-                  label="Update"
-                  @click="checkInfro()"
-                ></q-btn>
-                <br />
-                <q-btn
-                  flat
-                  icon="delete"
-                  color="primary"
-                  label="Delete Account"
-                  @click="deleteUsr"
-                ></q-btn>
-              </div>
-              <div v-if="!currentUser" class="q-ma-lg">
-                <br />
-                <q-icon
-                  name="warning"
-                  class="text-red"
-                  style="font-size: 4rem"
-                ></q-icon>
-                <br />
-                <br />
-                <div class="text-h5">로그인이 필요합니다!</div>
-                <br />
-                <br />
-                <q-btn unelevated color="primary" label="LOGIN" to="/"></q-btn>
-              </div>
+              <q-input
+                v-model="password2"
+                filled
+                label="비밀번호 확인"
+                :type="isPwd2 ? 'password' : 'text'"
+              >
+                <template v-slot:append>
+                  <q-icon
+                    :name="isPwd2 ? 'visibility_off' : 'visibility'"
+                    class="cursor-pointer"
+                    @click="isPwd2 = !isPwd2"
+                  ></q-icon>
+                </template>
+              </q-input>
+              <br />
+              <br />
+              <q-separator></q-separator>
+              <br />
+              <q-btn
+                flat
+                icon="home"
+                color="primary"
+                label="home"
+                to="/main"
+              ></q-btn>
+              <br />
+              <q-btn
+                flat
+                icon="person"
+                color="primary"
+                label="Update"
+                @click="checkInfro()"
+              ></q-btn>
+              <br />
+              <q-btn
+                flat
+                icon="delete"
+                color="primary"
+                label="Delete Account"
+                @click="deleteUsr"
+              ></q-btn>
+            </div>
+            <div v-if="!currentUser" class="q-ma-lg">
+              <br />
+              <q-icon
+                name="warning"
+                class="text-red"
+                style="font-size: 4rem"
+              ></q-icon>
+              <br />
+              <br />
+              <div class="text-h5">로그인이 필요합니다!</div>
+              <br />
+              <br />
+              <q-btn unelevated color="primary" label="LOGIN" to="/"></q-btn>
             </div>
           </div>
         </q-card-section>
