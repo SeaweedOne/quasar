@@ -18,12 +18,7 @@
               </q-field>
               <br />
               <br />
-              <q-btn
-                unelevated
-                color="primary"
-                label="확인"
-                to="/signUp"
-              ></q-btn>
+              <q-btn unelevated color="black" label="확인" to="/signUp"></q-btn>
             </div>
           </div>
         </q-card-section>

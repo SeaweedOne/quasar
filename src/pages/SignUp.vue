@@ -9,11 +9,18 @@
               <br />
               <div class="text-h6">Email</div>
               <br />
-              <q-input filled v-model="email" label="이메일"></q-input> <br />
+              <q-input
+                filled
+                v-model="email"
+                color="black"
+                label="이메일"
+              ></q-input>
+              <br />
               <div class="text-h6">Password</div>
               <br />
               <q-input
                 v-model="password1"
+                color="black"
                 label="비밀번호 (6자 이상)"
                 filled
                 :type="isPwd1 ? 'password' : 'text'"
@@ -30,6 +37,7 @@
 
               <q-input
                 v-model="password2"
+                color="black"
                 filled
                 label="비밀번호 확인"
                 :type="isPwd2 ? 'password' : 'text'"
@@ -45,11 +53,18 @@
               <br />
               <div class="text-h6">Name</div>
               <br />
-              <q-input filled v-model="name" label="이름"></q-input> <br />
+              <q-input
+                filled
+                color="black"
+                v-model="name"
+                label="이름"
+              ></q-input>
+              <br />
               <div class="text-h6">Phone Number</div>
               <br />
               <q-input
                 filled
+                color="black"
                 v-model="phone"
                 label="전화번호"
                 mask="###########"
@@ -57,7 +72,12 @@
               ></q-input>
               <div class="text-h6">Date Of Birth</div>
               <br />
-              <q-input v-model="date" filled type="date"></q-input>
+              <q-input
+                v-model="date"
+                color="black"
+                filled
+                type="date"
+              ></q-input>
               <br />
             </div>
           </div>

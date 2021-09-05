@@ -11,11 +11,12 @@
             <q-input
               filled
               v-model="email"
-              bg-color="#FAEBD7"
+              color="black"
               label="Email"
             ></q-input>
             <q-input
               v-model="password"
+              color="black"
               label="password"
               filled
               :type="isPwd ? 'password' : 'text'"

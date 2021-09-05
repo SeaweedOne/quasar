@@ -4,16 +4,16 @@
       <div class="q-pa-md">
         <div class="q-gutter-y-md column" style="max-width: 300px">
           <br />
-          <div class="text-h4">Find Password</div>
+          <div class="text-h4">FIND PASSWORD</div>
           <br />
           <div class="text-h7">가입하신 이메일 주소를 입력해주세요.</div>
           <div class="text-h7">이메일로 비밀번호 설정 이메일이 발송됩니다.</div>
           <br />
-          <q-input filled v-model="email" label="Email"></q-input>
+          <q-input filled v-model="email" color="black" label="Email"></q-input>
           <q-btn
             unelevated
             icon="mail"
-            color="primary"
+            color="black"
             @click="sendMail()"
             label="Send Mail"
           ></q-btn>

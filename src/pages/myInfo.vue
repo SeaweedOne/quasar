@@ -10,7 +10,7 @@
               <br />
               <br />
               <div class="text-h6">Name</div>
-              <q-field outlined :dense="dense">
+              <q-field color="black" outlined :dense="dense">
                 <template v-slot:control>
                   <div class="self-center full-width no-outline" tabindex="0">
                     <center>{{ userName }}</center>
@@ -19,7 +19,7 @@
               </q-field>
               <br />
               <div class="text-h6">ID</div>
-              <q-field outlined :dense="dense">
+              <q-field color="black" outlined :dense="dense">
                 <template v-slot:control>
                   <div class="self-center full-width no-outline" tabindex="0">
                     <center>{{ userId }}</center>
@@ -28,7 +28,7 @@
               </q-field>
               <br />
               <div class="text-h6">EmailVerified</div>
-              <q-field outlined :dense="dense">
+              <q-field color="black" outlined :dense="dense">
                 <template v-slot:control>
                   <div class="self-center full-width no-outline" tabindex="0">
                     <center>{{ emailVerified }}</center>
