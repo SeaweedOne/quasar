@@ -82,6 +82,7 @@ import { defineComponent, ref } from "vue";
 import { auth } from "src/boot/firebase";
 import { useQuasar } from "quasar";
 import { useRouter, useRoute } from "vue-router";
+import { useStore } from "vuex";
 
 export default defineComponent({
   name: "PageIndex",
@@ -90,6 +91,7 @@ export default defineComponent({
     const $q = useQuasar();
     const $router = useRouter();
     const $route = useRoute();
+    const store = useStore();
 
     let email = ref("");
     let password1 = ref("");
@@ -150,6 +152,7 @@ export default defineComponent({
           // Signed in
           var user = userCredential.user;
           console.log("success", user.email);
+          store.commit("setFireUser", userCredential.user);
           $q.notify({
             position: "center",
             message:

@@ -1,37 +1,46 @@
 <template>
   <center>
-    <div id="q-app" style="min-height: 100vh" class="q-ma-lg">
-      <div class="q-pa-md">
-        <div class="q-gutter-y-md column" style="max-width: 300px">
-          <center><div class="text-h4">LOGIN</div></center>
-          <br />
-          <q-input filled v-model="email" label="Email"></q-input>
-          <q-input
-            v-model="password"
-            label="password"
-            filled
-            :type="isPwd ? 'password' : 'text'"
-            hint=""
-          >
-            <template v-slot:append>
-              <q-icon
-                :name="isPwd ? 'visibility_off' : 'visibility'"
-                class="cursor-pointer"
-                @click="isPwd = !isPwd"
-              ></q-icon>
-            </template>
-          </q-input>
-          <q-btn
-            unelevated
-            color="primary"
-            @click="login()"
-            label="LOGIN"
-          ></q-btn>
-          <q-btn flat outline style="color: primary" to="/signup"
-            >회원가입</q-btn
-          >
-          <q-btn flat to="/findPwd">비밀번호 찾기</q-btn>
-          <!-- <router-link to="/signup"> 회원가입 </router-link> -->
+    <div class="img">
+      <div id="q-app" style="min-height: 100vh" class="q-ma-lg">
+        <div class="q-pa-md">
+          <div class="q-gutter-y-md column" style="max-width: 300px">
+            <br />
+            <br />
+            <center><div class="text-h4">LOGIN</div></center>
+            <br />
+            <q-input
+              filled
+              v-model="email"
+              bg-color="#FAEBD7"
+              label="Email"
+            ></q-input>
+            <q-input
+              v-model="password"
+              label="password"
+              filled
+              :type="isPwd ? 'password' : 'text'"
+              hint=""
+            >
+              <template v-slot:append>
+                <q-icon
+                  :name="isPwd ? 'visibility_off' : 'visibility'"
+                  class="cursor-pointer"
+                  @click="isPwd = !isPwd"
+                ></q-icon>
+              </template>
+            </q-input>
+            <q-btn
+              unelevated
+              color="black"
+              @click="login()"
+              label="LOGIN"
+            ></q-btn>
+            <q-btn flat outline style="color: primary" to="/signup"
+              >회원가입</q-btn
+            >
+            <q-btn flat to="/findPwd">비밀번호 찾기</q-btn>
+            <!-- <router-link to="/signup"> 회원가입 </router-link> -->
+          </div>
         </div>
       </div>
     </div>
@@ -57,12 +66,23 @@ export default defineComponent({
     let email = ref("");
     let password = ref("");
     let isPwd = ref("true");
-
+    // let login = () => {
+    //   auth
+    //     .setPersistence(auth.Auth.Persistence.NONE)
+    //     .then(() => {
+    //       var provider = new auth.signInWithEmailAndPassword();
+    //       return auth().signInWithRedirect(provider);
+    //     })
+    //     .catch((error) => {
+    //       // Handle Errors here.
+    //       var errorCode = error.code;
+    //       var errorMessage = error.message;
+    //     });
+    // };
     let login = () => {
       auth
         .signInWithEmailAndPassword(email.value, password.value)
         .then((userCredential) => {
-          // Signed in
           var user = userCredential.user;
           console.log("success", user.email);
           store.commit("setFireUser", userCredential.user);
@@ -100,7 +120,14 @@ export default defineComponent({
   display: flex;
   width: 70%;
   justify-content: center;
-  // max-width: 250px
   align-items: center;
+}
+.img {
+  border: 0;
+  padding: 0;
+  background-image: url("../css/aa.jpg");
+  min-height: 500;
+  background-position: center;
+  background-size: cover;
 }
 </style>

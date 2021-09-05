@@ -4,7 +4,7 @@
       <q-card flat bordered class="my-card bg-grey-1" style="min-height: 50vh">
         <q-card-section>
           <div class="col">
-            <div v-if="currentUser" class="q-ma-lg">
+            <div v-if="isUserAuth" class="q-ma-lg">
               <div class="text-h5">Update Your Password</div>
               <div class="text-h6">{{ userName }}님</div>
               <br />
@@ -80,7 +80,7 @@
                 @click="deleteUsr"
               ></q-btn>
             </div>
-            <div v-if="!currentUser" class="q-ma-lg">
+            <div v-if="!isUserAuth" class="q-ma-lg">
               <br />
               <q-icon
                 name="warning"
@@ -116,8 +116,8 @@ export default defineComponent({
     const $route = useRoute();
     const currentUser = auth.currentUser;
 
-    var userName = currentUser.displayName;
-    var userId = currentUser.email;
+    let userName = ref("");
+    let userId = ref("");
     var password1 = ref();
     var password2 = ref();
     var isPwd1 = ref("true");
@@ -147,8 +147,18 @@ export default defineComponent({
       }
     };
 
-    let updatePwd = () => {
-      currentUser
+    auth.setcurren;
+
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        console.log(user);
+        userName.value = user.displayName;
+        userId.value = user.email;
+      } else {
+      }
+    });
+    let updatePwd = (user) => {
+      user
         .updatePassword(password1.value)
         .then(() => {
           $q.notify({
@@ -196,6 +206,7 @@ export default defineComponent({
     return {
       text: ref("Field content"),
       dense: ref(false),
+
       currentUser,
       userName,
       userId,

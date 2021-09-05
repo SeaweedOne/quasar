@@ -1,11 +1,11 @@
 <template>
   <center>
     <div id="main" style="min-height: 1000vh" class="q-ma-lg">
-      <q-card flat bordered class="my-card bg-grey-1" style="min-height: 50vh">
+      <q-card flat bordered class="my-card bg-grey-1">
         <q-card-section>
           <div class="col">
-            <div v-if="currentUser" class="q-ma-lg">
-              <div class="text-h5">Account Information</div>
+            <div v-if="isUserAuth" class="q-ma-lg">
+              <div class="text-h5">ACCOUNT INFORMATION</div>
               <div class="text-h6">{{ userName }}님의 계정정보</div>
               <br />
               <br />
@@ -42,37 +42,37 @@
               <q-btn
                 flat
                 icon="home"
-                color="primary"
+                color="black"
                 label="home"
                 to="/main"
               ></q-btn>
               <br />
               <q-btn
                 flat
-                icon="person"
-                color="primary"
-                label="Update Password"
-                to="/updatePwd"
-              ></q-btn>
-              <br />
-              <q-btn
-                flat
                 icon="logout"
-                color="primary"
+                color="black"
                 label="LOGOUT"
                 @click="signOutAction"
                 to="/"
               ></q-btn>
               <br />
+              <!-- <q-btn
+                flat
+                icon="person"
+                color="primary"
+                label="Update Password"
+                to="/updatePwd"
+              ></q-btn>
+               <br />
               <q-btn
                 flat
                 icon="delete"
                 color="primary"
                 label="Delete Account"
                 @click="deleteUsr"
-              ></q-btn>
+              ></q-btn> -->
             </div>
-            <div v-if="!currentUser" class="q-ma-lg">
+            <div v-if="!isUserAuth" class="q-ma-lg">
               <br />
               <q-icon
                 name="warning"
@@ -84,7 +84,7 @@
               <div class="text-h5">로그인이 필요합니다!</div>
               <br />
               <br />
-              <q-btn unelevated color="primary" label="LOGIN" to="/"></q-btn>
+              <q-btn unelevated color="black" label="LOGIN" to="/"></q-btn>
             </div>
           </div>
         </q-card-section>
@@ -106,28 +106,21 @@ export default defineComponent({
     const $q = useQuasar();
     const $router = useRouter();
     const $route = useRoute();
-    const currentUser = auth.currentUser;
 
-    // const userName = currentUser.displayName;
-    // const userId = currentUser.displayName;
     var userName = ref();
     var userId = ref();
-    var date = ref("");
+
     var emailVerified = ref("False");
 
-    if (currentUser !== null) {
-      currentUser.providerData.forEach((profile) => {
-        userId.value = profile.uid;
-        userName.value = profile.displayName;
-        emailVerified.value = currentUser.emailVerified;
-        date.value = currentUser.birthday;
-        console.log("  Provider-specific UID: " + profile.uid);
-        console.log("  Name: " + profile.displayName);
-        console.log("  Email: " + profile.email);
-        console.log("  emailVerified: " + emailVerified.value);
-        console.log("  birthday: " + date.value);
-      });
-    }
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        console.log(user);
+        userName.value = user.displayName;
+        userId.value = user.email;
+        emailVerified.value = user.emailVerified;
+      } else {
+      }
+    });
 
     let deleteUsr = () => {
       currentUser
@@ -155,7 +148,7 @@ export default defineComponent({
     return {
       text: ref("Field content"),
       dense: ref(false),
-      currentUser,
+
       userId,
       userName,
       emailVerified,
@@ -178,7 +171,6 @@ export default defineComponent({
   display: flex;
   width: 50%;
   justify-content: center;
-  // max-width: 250px
   align-items: center;
 }
 </style>

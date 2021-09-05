@@ -1,14 +1,14 @@
 <template>
   <center>
     <div id="main" style="min-height: 1000vh" class="q-ma-lg">
-      <q-card flat bordered class="my-card bg-grey-1" style="min-height: 50vh">
+      <q-card flat bordered class="my-card bg-grey-1">
         <q-card-section>
           <div class="col">
-            <div v-if="currentUser" class="q-ma-lg">
+            <div v-if="isUserAuth" class="q-ma-lg">
               <div class="text-h5">HELLO!</div>
               <br />
-              <br />
               반가워요 {{ userName }}님!
+
               <br />
               {{ userId }}
               <br />
@@ -19,7 +19,7 @@
               <q-btn
                 flat
                 icon="person"
-                color="primary"
+                color="black"
                 label="Account Information"
                 to="/myInfo"
               ></q-btn>
@@ -27,21 +27,21 @@
               <q-btn
                 flat
                 icon="logout"
-                color="primary"
+                color="black"
                 label="LOGOUT"
                 @click="signOutAction"
                 to="/"
               ></q-btn>
               <br />
-              <q-btn
+              <!-- <q-btn
                 flat
                 icon="delete"
                 color="primary"
                 label="Delete Account"
                 @click="deleteUsr"
-              ></q-btn>
+              ></q-btn> -->
             </div>
-            <div v-if="!currentUser" class="q-ma-lg">
+            <div v-if="!isUserAuth" class="q-ma-lg">
               <br />
               <q-icon
                 name="warning"
@@ -75,50 +75,51 @@ export default defineComponent({
     const $q = useQuasar();
     const $router = useRouter();
     const $route = useRoute();
-    const currentUser = auth.currentUser;
+    // const currentUser = auth.currentUser;
 
-    var userName = currentUser.displayName;
-    var userId = currentUser.email;
-
-    let deleteUsr = () => {
-      currentUser
-        .delete()
-        .then(() => {
-          $q.notify({
-            position: "center",
-            message: "회원 탈퇴가 완료되었습니다.",
-            color: "grey",
-          });
-          $router.push({ path: "/" });
-        })
-        .catch((error) => {
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          console.log(errorMessage);
-          $q.notify({
-            position: "center",
-            message: errorMessage,
-            color: "red",
-          });
-        });
-    };
+    let userName = ref("");
+    let userId = ref("");
 
     auth.onAuthStateChanged((user) => {
       if (user) {
         console.log(user);
-        //userName.value = user.displayName;
-        // var uid = user.uid;
+        const userInfo = user;
+
+        userName.value = user.displayName;
+        userId.value = user.email;
       } else {
       }
     });
 
+    // let deleteUsr = () => {
+    //   currentUser
+    //     .delete()
+    //     .then(() => {
+    //       $q.notify({
+    //         position: "center",
+    //         message: "회원 탈퇴가 완료되었습니다.",
+    //         color: "grey",
+    //       });
+    //       $router.push({ path: "/" });
+    //     })
+    //     .catch((error) => {
+    //       var errorCode = error.code;
+    //       var errorMessage = error.message;
+    //       console.log(errorMessage);
+    //       $q.notify({
+    //         position: "center",
+    //         message: errorMessage,
+    //         color: "red",
+    //       });
+    //     });
+    // };
+
     return {
-      text: ref("Field content"),
-      dense: ref(false),
+      // text: ref("Field content"),
+      // dense: ref(false),
       userName,
       userId,
-      currentUser,
-      deleteUsr,
+      // deleteUsr,
     };
   },
 
