@@ -5,6 +5,7 @@ https://hana-firebase.netlify.app
 ## Install the dependencies
 ```bash
 npm install
+npm install --save vuex-persistedstate
 ```
 
 ### Start the app in development mode (hot-code reloading, error reporting, etc.)
