@@ -67,7 +67,7 @@
                 color="black"
                 v-model="phone"
                 label="전화번호"
-                mask="###########"
+                mask="###-####-####"
                 fill-mask
               ></q-input>
               <div class="text-h6">Date Of Birth</div>
@@ -103,6 +103,7 @@ import { auth } from "src/boot/firebase";
 import { useQuasar } from "quasar";
 import { useRouter, useRoute } from "vue-router";
 import { useStore } from "vuex";
+import { db } from "src/boot/firebase";
 
 export default defineComponent({
   name: "PageIndex",
@@ -123,8 +124,8 @@ export default defineComponent({
     let phone = ref("");
 
     // 가입정보 확인
-    // 공백이 있으면 if문 없으면 else
-    // if문 안에서 공백 위치 찾아 변수에 공백 항목 담아주고 마지막에 변수값으로 알림 띄우기
+    // 공백이 있으면 if문(if문 안에서 공백 위치 찾아 변수에 공백 항목 담아주고 마지막에 변수값으로 알림 띄우기)
+    //없으면 else
     // 가입 성공 시 자동 로그인 후 메인페이지로 이동
     let checkInfromation = () => {
       if (
@@ -193,7 +194,6 @@ export default defineComponent({
           });
         });
     };
-
     let join = () => {
       console.log("called " + email.value);
       auth
@@ -206,6 +206,31 @@ export default defineComponent({
             phoneNumber: phone.value,
             birthday: date.value,
           });
+
+          db.collection("users")
+            .add({
+              id: email.value,
+              name: name.value,
+              birthday: date.value,
+              phoneNumber: phone.value,
+            })
+            .then((docRef) => {
+              console.log("Document written with ID: ", docRef.id);
+              this.$q.notify({
+                position: center,
+                message: "Register Success",
+                color: "grey",
+              });
+            })
+
+            .catch((error) => {
+              console.error("Error adding document: ", error);
+              this.$q.notify({
+                message: error,
+                color: "red",
+              });
+            });
+
           // $q.notify({
           //   position: "top",
           //   message: "회원가입이 완료되었습니다.",
@@ -246,7 +271,6 @@ export default defineComponent({
   display: flex;
   width: 50%;
   justify-content: center;
-  // max-width: 250px
   align-items: center;
 }
 </style>

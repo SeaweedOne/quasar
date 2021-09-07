@@ -4,7 +4,7 @@
       <q-card flat bordered class="my-card bg-grey-1" style="min-height: 50vh">
         <q-card-section>
           <div class="col">
-            <div v-if="isUserAuth" class="q-ma-lg">
+            <div v-if="currentUsr" class="q-ma-lg">
               <div class="text-h5">Update Your Password</div>
               <div class="text-h6">{{ userName }}님</div>
               <br />
@@ -68,8 +68,8 @@
                 flat
                 icon="person"
                 color="primary"
+                @click="checkInfo()"
                 label="Update"
-                @click="checkInfro()"
               ></q-btn>
               <br />
               <q-btn
@@ -80,7 +80,7 @@
                 @click="deleteUsr"
               ></q-btn>
             </div>
-            <div v-if="!isUserAuth" class="q-ma-lg">
+            <div v-if="!currentUsr" class="q-ma-lg">
               <br />
               <q-icon
                 name="warning"
@@ -114,8 +114,8 @@ export default defineComponent({
     const $q = useQuasar();
     const $router = useRouter();
     const $route = useRoute();
-    const currentUser = auth.currentUser;
-
+    const currentUsr = auth.currentUser;
+    console.log("asdf" + currentUsr.email);
     let userName = ref("");
     let userId = ref("");
     var password1 = ref();
@@ -123,7 +123,7 @@ export default defineComponent({
     var isPwd1 = ref("true");
     var isPwd2 = ref("true");
 
-    let checkInfro = () => {
+    let checkInfo = () => {
       if (!password1.value | !password2.value) {
         $q.notify({
           position: "center",
@@ -147,8 +147,6 @@ export default defineComponent({
       }
     };
 
-    auth.setcurren;
-
     auth.onAuthStateChanged((user) => {
       if (user) {
         console.log(user);
@@ -157,8 +155,8 @@ export default defineComponent({
       } else {
       }
     });
-    let updatePwd = (user) => {
-      user
+    let updatePwd = (currentUsr) => {
+      currentUsr
         .updatePassword(password1.value)
         .then(() => {
           $q.notify({
@@ -181,7 +179,7 @@ export default defineComponent({
     };
 
     let deleteUsr = () => {
-      currentUser
+      currentUsr
         .delete()
         .then(() => {
           $q.notify({
@@ -207,14 +205,14 @@ export default defineComponent({
       text: ref("Field content"),
       dense: ref(false),
 
-      currentUser,
+      currentUsr,
       userName,
       userId,
       password1,
       password2,
       isPwd1,
       isPwd2,
-      checkInfro,
+      checkInfo,
       updatePwd,
       deleteUsr,
     };

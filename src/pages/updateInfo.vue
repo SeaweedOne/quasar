@@ -9,15 +9,6 @@
               <div class="text-h6">{{ userName }}님의 계정정보</div>
               <br />
               <br />
-              <div class="text-h6">Name</div>
-              <q-field color="black" outlined :dense="dense">
-                <template v-slot:control>
-                  <div class="self-center full-width no-outline" tabindex="0">
-                    <center>{{ userName }}</center>
-                  </div>
-                </template>
-              </q-field>
-              <br />
               <div class="text-h6">ID</div>
               <q-field color="black" outlined :dense="dense">
                 <template v-slot:control>
@@ -27,32 +18,33 @@
                 </template>
               </q-field>
               <br />
+              <div class="text-h6">Name</div>
+              <q-field color="black" outlined :dense="dense">
+                <template v-slot:control>
+                  <div class="self-center full-width no-outline" tabindex="0">
+                    <center>{{ userName }}</center>
+                  </div>
+                </template>
+              </q-field>
+              <br />
               <div class="text-h6">Phone Number</div>
-              <q-field color="black" outlined :dense="dense">
-                <template v-slot:control>
-                  <div class="self-center full-width no-outline" tabindex="0">
-                    <center>{{ phoneNum }}</center>
-                  </div>
-                </template>
-              </q-field>
+              <q-input
+                filled
+                color="black"
+                v-model="phone"
+                label="전화번호"
+                mask="###-####-####"
+                fill-mask
+              ></q-input>
+              <div class="text-h6">Birthday</div>
               <br />
-              <div class="text-h6">Brithday</div>
-              <q-field color="black" outlined :dense="dense">
-                <template v-slot:control>
-                  <div class="self-center full-width no-outline" tabindex="0">
-                    <center>{{ bDay }}</center>
-                  </div>
-                </template>
-              </q-field>
+              <q-input
+                v-model="date"
+                color="black"
+                filled
+                type="date"
+              ></q-input>
               <br />
-              <div class="text-h6">EmailVerified</div>
-              <q-field color="black" outlined :dense="dense">
-                <template v-slot:control>
-                  <div class="self-center full-width no-outline" tabindex="0">
-                    <center>{{ emailVerified }}</center>
-                  </div>
-                </template>
-              </q-field>
               <br />
               <br />
               <q-separator></q-separator>
@@ -69,8 +61,16 @@
                 flat
                 icon="colorize"
                 color="black"
-                label="Update Information"
-                to="/updateInfo"
+                label="Update"
+                @click="updateInformation"
+              ></q-btn>
+              <br />
+              <q-btn
+                flat
+                icon="person"
+                color="black"
+                label="Account Information"
+                to="/myInfo"
               ></q-btn>
               <br />
               <q-btn
@@ -125,8 +125,11 @@ export default defineComponent({
     const $router = useRouter();
     const $route = useRoute();
 
-    const currentUser = auth.currentUser;
-    console.log("asdf" + currentUser);
+    // const currentUser = auth.currentUser;
+    // console.log("asdf" + currentUser);
+    let docId = ref("");
+    let date = ref("");
+    let phone = ref("");
 
     var userName = ref();
     var userId = ref();
@@ -138,68 +141,89 @@ export default defineComponent({
     auth.onAuthStateChanged((user) => {
       if (user) {
         console.log(user);
-        // userName.value = user.displayName;
+        userName.value = user.displayName;
         userId.value = user.email;
-        emailVerified.value = user.emailVerified;
       } else {
       }
     });
+    console.log("userId" + userId.value);
 
-    // let deleteUsr = () => {
-    //   currentUser
-    //     .delete()
-    //     .then(() => {
-    //       $q.notify({
-    //         position: "center",
-    //         message: "회원 탈퇴가 완료되었습니다.",
-    //         color: "grey",
-    //       });
-    //       $router.push({ path: "/" });
-    //     })
-    //     .catch((error) => {
-    //       var errorCode = error.code;
-    //       var errorMessage = error.message;
-    //       console.log(errorMessage);
-    //       $q.notify({
-    //         position: "center",
-    //         message: errorMessage,
-    //         color: "red",
-    //       });
-    //     });
-    // };
+    let updateInformation = () => {
+      db.collection("users")
+        .where("id", "==", userId.value)
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            console.log(doc.id, " => ", doc.data());
+            docId.value = doc.id;
+            console.log("docid" + docId.value);
+
+            db.collection("users")
+              .doc(docId.value)
+              .set({
+                id: userId.value,
+                name: userName.value,
+                phoneNumber: phone.value,
+                birthday: date.value,
+              })
+              .then(() => {
+                console.log("Document successfully written!");
+                $q.notify({
+                  position: "center",
+                  message: "회원정보 변경이 완료되었습니다.",
+                  color: "grey",
+                });
+                $router.push({ path: "/myInfo" });
+              })
+              .catch((error) => {
+                console.error("Error writing document: ", error);
+              });
+          });
+        })
+        .catch((error) => {
+          console.log("Error getting documents: ", error);
+        });
+    };
+
+    let deleteUsr = () => {
+      currentUser
+        .delete()
+        .then(() => {
+          $q.notify({
+            position: "center",
+            message: "회원 탈퇴가 완료되었습니다.",
+            color: "grey",
+          });
+          $router.push({ path: "/" });
+        })
+        .catch((error) => {
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          console.log(errorMessage);
+          $q.notify({
+            position: "center",
+            message: errorMessage,
+            color: "red",
+          });
+        });
+    };
 
     return {
       text: ref("Field content"),
       dense: ref(false),
       userId,
       userName,
-      emailVerified,
-      phoneNum,
-      bDay,
-      // deleteUsr,
+      phone,
+      date,
+      updateInformation,
+      deleteUsr,
     };
   },
-  mounted() {
-    // this.authAction();
-    // if (this.getFireUser != null) {
-    db.collection("users")
-      .where("id", "==", this.getFireUser.email)
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots​
-          console.log(doc.id, " => ", doc.data());
-          // this.userId = doc.data().id;
-          this.userName = doc.data().name;
-          this.phoneNum = doc.data().phoneNumber;
-          this.bDay = doc.data().birthday;
-        });
-      })
-      .catch((error) => {
-        console.log("Error getting documents: ", error);
-      });
-    // }
-  },
+  // mounted() {
+  //   // this.authAction();
+  //   // if (this.getFireUser != null) {
+
+  // },
 
   computed: {
     ...mapGetters(["getFireUser", "isUserAuth"]),

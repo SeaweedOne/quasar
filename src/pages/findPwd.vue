@@ -17,9 +17,7 @@
             @click="sendMail()"
             label="Send Mail"
           ></q-btn>
-          <q-btn flat outline style="color: primary" to="/signup"
-            >뒤로가기</q-btn
-          >
+          <q-btn flat outline style="color: primary" to="/">뒤로가기</q-btn>
         </div>
       </div>
     </div>

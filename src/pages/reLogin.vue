@@ -6,7 +6,10 @@
           <div class="q-gutter-y-md column" style="max-width: 300px">
             <br />
             <br />
-            <center><div class="text-h4">LOGIN</div></center>
+            <center>
+              <div class="text-h6">안전한 비밀번호 변경을 위해</div>
+              <div class="text-h6">다시 한 번 로그인 해주세요.</div>
+            </center>
             <br />
             <q-input
               filled
@@ -36,11 +39,6 @@
               @click="login()"
               label="LOGIN"
             ></q-btn>
-            <q-btn flat outline style="color: primary" to="/signup"
-              >회원가입</q-btn
-            >
-            <q-btn flat to="/findPwd">비밀번호 찾기</q-btn>
-            <!-- <router-link to="/signup"> 회원가입 </router-link> -->
           </div>
         </div>
       </div>
@@ -93,7 +91,7 @@ export default defineComponent({
             message: "login success",
             color: "grey",
           });
-          $router.push({ path: "/main" });
+          $router.push({ path: "/updatePwd" });
         })
         .catch((error) => {
           var errorCode = error.code;

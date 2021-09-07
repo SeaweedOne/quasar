@@ -8,7 +8,6 @@
               <div class="text-h5">HELLO!</div>
               <br />
               반가워요 {{ userName }}님!
-
               <br />
               {{ userId }}
               <br />
@@ -22,6 +21,14 @@
                 color="black"
                 label="Account Information"
                 to="/myInfo"
+              ></q-btn>
+              <br />
+              <q-btn
+                flat
+                icon="colorize"
+                color="black"
+                label="Update Information"
+                to="/updateInfo"
               ></q-btn>
               <br />
               <q-btn
@@ -64,10 +71,11 @@
 
 <script>
 import { defineComponent, ref } from "vue";
-import { auth } from "src/boot/firebase";
+import { auth, db } from "src/boot/firebase";
 import { useQuasar } from "quasar";
 import { useRouter, useRoute } from "vue-router";
 import { mapActions, mapGetters } from "vuex";
+// import { db } from "src/boot/firebase";
 
 export default defineComponent({
   name: "PageIndex",
@@ -76,15 +84,16 @@ export default defineComponent({
     const $router = useRouter();
     const $route = useRoute();
     // const currentUser = auth.currentUser;
+    // console.log("adsfa" + currentUser);
 
     let userName = ref("");
     let userId = ref("");
+    let phoneNum = ref("");
+    let bDay = ref("");
 
     auth.onAuthStateChanged((user) => {
       if (user) {
         console.log(user);
-        const userInfo = user;
-
         userName.value = user.displayName;
         userId.value = user.email;
       } else {
@@ -113,14 +122,38 @@ export default defineComponent({
     //       });
     //     });
     // };
-
+    console.log(userId.value);
     return {
       // text: ref("Field content"),
       // dense: ref(false),
       userName,
       userId,
+      phoneNum,
+      bDay,
       // deleteUsr,
     };
+  },
+
+  mounted() {
+    // this.authAction();
+    // if (this.getFireUser != null) {
+    db.collection("users")
+      .where("id", "==", this.getFireUser.email)
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          // doc.data() is never undefined for query doc snapshots​
+          console.log(doc.id, " => ", doc.data());
+          this.userId = doc.data().id;
+          this.userName = doc.data().name;
+          this.phoneNum = doc.data().name;
+          this.bDay = doc.data().birthday;
+        });
+      })
+      .catch((error) => {
+        console.log("Error getting documents: ", error);
+      });
+    // }
   },
 
   computed: {
