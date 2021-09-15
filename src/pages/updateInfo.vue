@@ -219,6 +219,37 @@ export default defineComponent({
       deleteUsr,
     };
   },
+
+  methods: {
+    confirm() {
+      const user = auth.currentUser;
+      console.log("current user>>>", user);
+      //  if(user.providerData[0].providerId == "password"){}
+      this.$q
+        .dialog({
+          title: "확인",
+          message: "비번 입력",
+          prompt: {
+            model: "",
+            type: "password",
+          },
+          cancel: true,
+          persistent: true,
+        })
+        .onOk((data) => {
+          var credentials = g_auth.EmailAuthProvider.credential(
+            user.email,
+            data
+          );
+          user.reauthenticateWithCredential(credentials).then(() => {
+            console.log("reauth ok");
+            user.displayName = userName.value;
+            // users collenction -> delete info
+          });
+        });
+    },
+  },
+
   // mounted() {
   //   // this.authAction();
   //   // if (this.getFireUser != null) {

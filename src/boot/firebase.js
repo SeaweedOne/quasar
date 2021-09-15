@@ -17,4 +17,5 @@ if (!firebase.apps.length) {
 // firebase.analytics();
 
 export const auth = firebase.auth();
+export const q_auth = firebase.auth;
 export const db = firebase.firestore();

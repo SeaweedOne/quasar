@@ -32,14 +32,6 @@
             </q-input>
             <q-checkbox v-model="remember" label="Remember Me" color="teal" />​
 
-            <div>
-              <q-btn padding="none" flat
-                ><img
-                  src="../assets/googleBtn.png"
-                  style="width: 300px"
-                  @click="googleLogin()"
-              /></q-btn>
-            </div>
             <q-btn
               unelevated
               color="black"
@@ -60,11 +52,10 @@
 
 <script>
 import { defineComponent, ref } from "vue";
-import { auth, g_auth, db } from "src/boot/firebase";
+import { auth } from "src/boot/firebase";
 import { useQuasar } from "quasar";
 import { useRouter, useRoute } from "vue-router";
 import { useStore } from "vuex";
-import router from "src/router";
 
 export default defineComponent({
   name: "login",
@@ -137,41 +128,6 @@ export default defineComponent({
       login,
       remember,
     };
-  },
-
-  methods: {
-    googleLogin() {
-      var provider = new g_auth.GoogleAuthProvider();
-      auth.languageCode = "kr_KR";
-      auth
-        .signInWithPopup(provider)
-        .then((result) => {
-          var user = result.user;
-          this.$store.commit("setFireUser", user);
-          db.collection("users")
-            .where("id", "==", user.email)
-            .get()
-            .then((snapshot) => {
-              if (snapshot.empty == true) {
-                db.collection("users").add({
-                  id: user.email,
-                  name: user.displayName,
-                });
-              } else {
-                snapshot.forEach((doc) => {
-                  db.collection("users").doc(doc.id).set({
-                    id: user.email,
-                    name: user.displayName,
-                  });
-                });
-              }
-            });
-          $router.push({ path: "/main" });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
   },
   mounted() {
     if (localStorage.checkbox && localStorage.checkbox !== "") {

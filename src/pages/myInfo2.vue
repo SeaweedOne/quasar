@@ -6,14 +6,14 @@
           <div class="col">
             <div v-if="isUserAuth" class="q-ma-lg">
               <div class="text-h5">ACCOUNT INFORMATION</div>
-              <div class="text-h6">{{ userName }}님의 계정정보</div>
+              <div class="text-h6">{{ name }}님의 계정정보</div>
               <br />
               <br />
               <div class="text-h6">Name</div>
               <q-field color="black" outlined :dense="dense">
                 <template v-slot:control>
                   <div class="self-center full-width no-outline" tabindex="0">
-                    <center>{{ userName }}</center>
+                    <center>{{ name }}</center>
                   </div>
                 </template>
               </q-field>
@@ -22,7 +22,7 @@
               <q-field color="black" outlined :dense="dense">
                 <template v-slot:control>
                   <div class="self-center full-width no-outline" tabindex="0">
-                    <center>{{ userId }}</center>
+                    <center>{{ email }}</center>
                   </div>
                 </template>
               </q-field>
@@ -50,6 +50,24 @@
                 <template v-slot:control>
                   <div class="self-center full-width no-outline" tabindex="0">
                     <center>{{ emailVerified }}</center>
+                  </div>
+                </template>
+              </q-field>
+              <br />
+              <div class="text-h6">creationTime</div>
+              <q-field color="black" outlined :dense="dense">
+                <template v-slot:control>
+                  <div class="self-center full-width no-outline" tabindex="0">
+                    <center>{{ creationTime }}</center>
+                  </div>
+                </template>
+              </q-field>
+              <br />
+              <div class="text-h6">lastSignInTime</div>
+              <q-field color="black" outlined :dense="dense">
+                <template v-slot:control>
+                  <div class="self-center full-width no-outline" tabindex="0">
+                    <center>{{ lastSignInTime }}</center>
                   </div>
                 </template>
               </q-field>
@@ -82,13 +100,13 @@
                 to="/"
               ></q-btn>
               <br />
-              <!-- <q-btn
+              <q-btn
                 flat
                 icon="delete"
                 color="primary"
                 label="Delete Account"
-                @click="deleteUsr"
-              ></q-btn> -->
+                @click="confirm"
+              ></q-btn>
             </div>
             <div v-if="!isUserAuth" class="q-ma-lg">
               <br />
@@ -113,109 +131,107 @@
 
 <script>
 import { defineComponent, ref } from "vue";
-import { auth, db } from "src/boot/firebase";
+import { auth, g_auth, db } from "src/boot/firebase";
 import { useQuasar } from "quasar";
 import { useRouter, useRoute } from "vue-router";
 import { mapActions, mapGetters } from "vuex";
-
-export default defineComponent({
-  name: "PageIndex",
-  setup() {
-    const $q = useQuasar();
-    const $router = useRouter();
-    const $route = useRoute();
-
-    const currentUser = auth.currentUser;
-    console.log("asdf" + currentUser);
-
-    var userName = ref();
-    var userId = ref();
-    var phoneNum = ref();
-    var bDay = ref();
-
-    var emailVerified = ref("False");
-
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        console.log(user);
-        // userName.value = user.displayName;
-        userId.value = user.email;
-        emailVerified.value = user.emailVerified;
-      } else {
-      }
-    });
-
-    // let deleteUsr = () => {
-    //   currentUser
-    //     .delete()
-    //     .then(() => {
-    //       $q.notify({
-    //         position: "center",
-    //         message: "회원 탈퇴가 완료되었습니다.",
-    //         color: "grey",
-    //       });
-    //       $router.push({ path: "/" });
-    //     })
-    //     .catch((error) => {
-    //       var errorCode = error.code;
-    //       var errorMessage = error.message;
-    //       console.log(errorMessage);
-    //       $q.notify({
-    //         position: "center",
-    //         message: errorMessage,
-    //         color: "red",
-    //       });
-    //     });
-    // };
-
+export default {
+  data() {
     return {
-      text: ref("Field content"),
+      name: "",
+      email: "",
+      creationTime: "",
+      lastSignInTime: "",
+       phoneNum = "",
+   bDay = "",
+   emailVerified = "",
+   text: ref("Field content"),
       dense: ref(false),
-      userId,
-      userName,
-      emailVerified,
-      phoneNum,
-      bDay,
-      // deleteUsr,
     };
   },
-  mounted() {
-    // this.authAction();
-    // if (this.getFireUser != null) {
-    db.collection("users")
-      .where("id", "==", this.getFireUser.email)
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots​
-          console.log(doc.id, " => ", doc.data());
-          // this.userId = doc.data().id;
-          this.userName = doc.data().name;
-          this.phoneNum = doc.data().phoneNumber;
-          this.bDay = doc.data().birthday;
-        });
-      })
-      .catch((error) => {
-        console.log("Error getting documents: ", error);
-      });
-    // }
+  created() {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        console.log("user>>>", user);
+        this.email = user.email;
+        this.creationTime = user.metadata.creationTime;
+        this.lastSignInTime = user.metadata.lastSignInTime;
+        this.name = user.displayName;
+        this.emailVerified = user.emailVerified
+      } else {
+        console.log("user sined out");
+      }
+    });
   },
-
-  computed: {
+  methods: {
+    deleteUserInfo(users) {
+      return new Promise(function (resolve, reject) {
+        db.collection("users")
+          .where("id", "==", users.email)
+          .get()
+          .then((snapshot) => {
+            snapshot.forEach((doc) => {
+               this.phoneNum = doc.data().phoneNumber;
+          this.bDay = doc.data().birthday;
+              db.collection("users")
+                .doc(doc.id)
+                .delete()
+                .then(() => {
+                  console.log("doc deleted");
+                  resolve("success");
+                })
+                .catch((err) => {
+                  console.log("delete error ", err);
+                  reject(err);
+                });
+            });
+          });
+      });
+    },
+    confirm() {
+      const user = auth.currentUser;
+      console.log("current user>>>", user);
+      //  if(user.providerData[0].providerId == "password"){}
+      this.$q
+        .dialog({
+          title: "확인",
+          message: "비번 입력",
+          prompt: {
+            model: "",
+            type: "password",
+          },
+          cancel: true,
+          persistent: true,
+        })
+        .onOk((data) => {
+          var credentials = g_auth.EmailAuthProvider.credential(
+            user.email,
+            data
+          );
+          user.reauthenticateWithCredential(credentials).then(() => {
+            console.log("reauth ok");
+            // users collenction -> delete info
+            this.deleteUserInfo(user)
+              .then((res) => {
+                console.log(res);
+                user.delete().then(() => {
+                  console.log("firebase auth acccount deleted");
+                });
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          });
+        });
+    },
+  },
+    computed: {
     ...mapGetters(["getFireUser", "isUserAuth"]),
   },
-
   methods: {
     ...mapActions(["signOutAction", "authAction"]),
   },
-});
-</script>
 
-<style lang="scss">
-.main {
-  display: flex;
-  width: 50%;
-  justify-content: center;
-  align-items: center;
-}
-</style>
+};
+</script>
+<style></style>
