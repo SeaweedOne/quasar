@@ -40,18 +40,11 @@ const linksList = [
   {
     title: "Login",
     icon: "login",
-    link: "https://hana-firebase.netlify.app/#/",
+    // link: "https://hana-firebase.netlify.app/#/",
+    link: "/",
+    external: false,
   },
-  // {
-  //   title: "Main",
-  //   icon: "home",
-  //   link: "https://hana-firebase.netlify.app/#/main",
-  // },
-  // {
-  //   title: "MyPage",
-  //   icon: "person",
-  //   link: "https://hana-firebase.netlify.app/#/myInfo",
-  // },
+
   {
     title: "Hana's Profile",
     icon: "woman",
